@@ -41,6 +41,22 @@ int main()
     char check = 'a';
     switch (check)
     {
+        case 'a' || 1:
+			printf("1");
+        case 'b' || 2:
+			printf("2");
+            break;
+        default:
+			printf("0");
+    }
+}
+
+#elif Q_NO == 5
+int main()
+{
+    char check = 'a';
+    switch (check)
+    {
         case 'a' | 1:
 			printf("1");
         case 'b' | 2:
@@ -50,5 +66,4 @@ int main()
 			printf("0");
     }
 }
-
 #endif
