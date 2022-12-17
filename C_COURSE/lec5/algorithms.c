@@ -15,7 +15,7 @@ void BubbleSort (int arr[], int size) {
 }
 
 
-int LinearSearch (int arr[], int size, int number) {
+int LinearSearch (const int arr[], int size, int number) {
 	int i;
 	for (i=0; i<size; i++) {
 		if (arr[i] == number) {
@@ -25,7 +25,7 @@ int LinearSearch (int arr[], int size, int number) {
 	return i;
 }
 
-int BinarySearch (int arr[], int size, int number) {
+int BinarySearch (const int arr[], int size, int number) {
 	int start = 0;
 	int end = size - 1;
 	int mid;

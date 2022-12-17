@@ -1,0 +1,11 @@
+
+1. signed (default)
+	char, int
+2. unsigned
+	char, int
+3. short
+	int
+4. long
+	int, double
+5. long long
+	int
