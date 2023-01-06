@@ -12,14 +12,19 @@ void* reallocate(void* ptr_old, u32 old_size, u32 new_size);
 int main (void) {
 	NodeType *head = NULL_PTR;
 	NodeType *temp = NULL_PTR;
-	temp = LinkedList_Append(&head, 2); // 2
+	temp = LinkedList_Append(&head, 14); // 2
 	LinkedList_Append(&head, 3); // 2 3
 	LinkedList_InsertAfter(&head, temp, 8); // 2 8 3
-	LinkedList_Append(&head, 5); // 2 8 3 5
-	LinkedList_InsertFirst(&head, 1); // 1 2 8 3 5
+	LinkedList_Append(&head, 6); // 2 8 3 5
+	LinkedList_Append(&head, 2); // 2 8 3 5
+	LinkedList_InsertFirst(&head, 2); // 1 2 8 3 5
 	temp = LinkedList_Append(&head, 10); // 1 2 8 3 5 10
 	LinkedList_Append(&head, 15); // 1 2 8 3 5 10 15
-	LinkedList_DeleteNode(&head, temp); // 1 2 8 3 5 15
+	LinkedList_Append(&head, 2); // 1 2 8 3 5 10 15
+	//LinkedList_DeleteNode(&head, temp); // 1 2 8 3 5 15
+	LinkedList_Print(head);
+	//LinkedList_DeleteNumber(&head, 2);
+	LinkedList_Sort(&head);
 	LinkedList_Print(head);
 	LinkedList_DeleteAll(&head);
 	LinkedList_Print(head);

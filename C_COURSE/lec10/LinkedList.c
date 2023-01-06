@@ -81,7 +81,32 @@ NodeType* LinkedList_InsertAfter(NodeType** head_ref, NodeType* node, u32 data) 
 
 
 void LinkedList_Sort(NodeType** head_ref) {
-	
+	u8 size = 0;
+	u8 i, j;
+	NodeType *current_node = *head_ref;
+	NodeType *prev_node;
+	while (current_node != NULL_PTR) {
+		size++;
+		current_node = current_node->next;
+	}
+	current_node = (*head_ref)->next;
+	prev_node = *head_ref;
+	for (i=size-1; i>0; i--) {
+		current_node = (*head_ref)->next;
+		prev_node = *head_ref;
+		for (j=0; j<i; j++) {
+			if (current_node->data < prev_node->data) {
+				prev_node->next = current_node->next;
+				current_node->next = (current_node->next)->next;
+				(prev_node->next)->next = current_node;
+				prev_node = prev_node->next;
+			} else {
+				prev_node = current_node;
+				current_node = current_node->next;
+			}
+		}
+	}
+
 }
 
 
@@ -92,7 +117,47 @@ void LinkedList_Reverse(NodeType** head_ref) {
 
 
 void LinkedList_DeleteNumber(NodeType** head_ref, u32 number) {
-	
+	/* Declaring current_node to iterate over all nodes */
+	NodeType *current_node = (*head_ref)->next;
+	NodeType *prev_node = *head_ref;
+	while(current_node != NULL_PTR) {
+		if (current_node->data == number) {
+			prev_node->next = current_node->next;
+			free(current_node);
+			current_node = prev_node->next;
+		}
+		else {
+			prev_node = current_node;
+			current_node = current_node->next;
+		}
+	}
+	if ((*head_ref)->data == number) {
+		prev_node = *head_ref;
+		*head_ref = (*head_ref)->next;
+		free(prev_node);
+	}
+
+	/*
+	NodeType *temp;
+	while(current_node != NULL_PTR) {
+		if (current_node->next == NULL_PTR) {
+			break;
+		}
+		if ((current_node->next)->data == number) {
+			temp = current_node->next;
+			current_node->next = (current_node->next)->next;
+			free(temp);
+		}
+		if ((current_node->next != NULL_PTR) && (current_node->next)->data != number) {
+			current_node = current_node->next;
+		}
+	}
+	if ((*head_ref)->data == number) {
+		temp = *head_ref;
+		*head_ref = (*head_ref)->next;
+		free(temp);
+	}
+	*/
 }
 
 
