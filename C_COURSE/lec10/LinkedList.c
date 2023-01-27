@@ -18,7 +18,7 @@ void LinkedList_Print(const NodeType *head_ref) {
 }
 
 
-NodeType* LinkedList_Append(NodeType** head_ref, u32 data) {
+NodeType* LinkedList_Append(NodeType** head_ref, LinkedListDataType data) {
 	/* Reverse space for new_node*/
 	NodeType *new_node = (NodeType*)malloc(sizeof(NodeType));
 	/* Declaring current_node to iterate over all nodes */
@@ -44,7 +44,7 @@ NodeType* LinkedList_Append(NodeType** head_ref, u32 data) {
 }
 
 
-void LinkedList_InsertFirst(NodeType** head_ref, u32 data) {
+void LinkedList_InsertFirst(NodeType** head_ref, LinkedListDataType data) {
 	/* Reverse space for new_node*/
 	NodeType *new_node = (NodeType*)malloc(sizeof(NodeType));
 	/* Initializing new_node*/
@@ -116,7 +116,7 @@ void LinkedList_Reverse(NodeType** head_ref) {
 
 
 
-void LinkedList_DeleteNumber(NodeType** head_ref, u32 number) {
+void LinkedList_DeleteNumber(NodeType** head_ref, LinkedListDataType number) {
 	/* Declaring current_node to iterate over all nodes */
 	NodeType *current_node = (*head_ref)->next;
 	NodeType *prev_node = *head_ref;
