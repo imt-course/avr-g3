@@ -1,1 +1,9 @@
 *.exe
+RemoteSystemsTempFiles
+.metadata
+.project
+.settings
+Release
+.cproject
+.gitignore
+Packages
