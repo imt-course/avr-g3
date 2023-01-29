@@ -7,3 +7,4 @@ Release
 .cproject
 .gitignore
 Packages
+/ECLIPSE_PROJECTS/AVR_DRIVERS/.vscode/*.json

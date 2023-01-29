@@ -9,6 +9,9 @@
 #include "Types.h"
 #include "Macros.h"
 #include "Registers.h"
+#include "Dio.h"
+#include "Led.h"
+#include "Button.h"
 #include "Delay.h"
 
 int main (void) {
@@ -29,7 +32,7 @@ int main (void) {
 	}
 #endif
 
-#if 1
+#if 0
 
 	/*
 	 *  LED:    PIN_A0
@@ -40,9 +43,11 @@ int main (void) {
 	SET_BIT(DDRA, 0);
 	/* Set SWITCH pin as input */
 	CLR_BIT(DDRA, 1);
+	/* Enable Pull up resistor */
+	SET_BIT(PORTA, 1);
 	for (;;) {
 		/* Check if SWITCH is pressed */
-		if (GET_BIT(PINA, 1) == 1) {
+		if (GET_BIT(PINA, 1) == 0) {
 			/*Turn LED on*/
 			SET_BIT(PORTA, 0);
 		}
@@ -53,5 +58,20 @@ int main (void) {
 	}
 
 #endif
+
+#if 1
+	Led_Init(LED_PIN);
+	Button_Init(BUTTON_PIN);
+	while (1)
+	{
+		if (Button_GetState(BUTTON_PIN) == BUTTON_PRESSED) {
+			Led_TurnOn(LED_PIN);
+		}
+		else {
+			Led_TurnOff(LED_PIN);
+		}
+	}
+#endif
+
 
 }
