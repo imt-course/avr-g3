@@ -30,16 +30,10 @@ Button_StateType Button_GetState(Dio_PortType port, Dio_PinType pin) {
     if (Dio_ReadPinLevel(port, pin) == DIO_LEVEL_LOW)
 #elif (BUTTON_CONNECTION == BUTTON_PULLDOWN)
     if (Dio_ReadPinLevel(port, pin) == DIO_LEVEL_HIGH)
-#else
-    if (0)
 #endif
     {
         ret_value = BUTTON_PRESSED;
     }
-    else {
-        ret_value = BUTTON_NOT_PRESSED;
-    }
     return ret_value;
 }
-
 

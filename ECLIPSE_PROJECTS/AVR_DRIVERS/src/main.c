@@ -12,9 +12,17 @@
 #include "Dio.h"
 #include "Led.h"
 #include "Button.h"
+#include "Ssd.h"
+#include "Lcd.h"
 #include "Delay.h"
 
 int main (void) {
+	Lcd_Init();
+	Lcd_SendData('A');
+	Lcd_SendData('h');
+	Lcd_SendData('m');
+	Lcd_SendData('e');
+	Lcd_SendData('d');
 
 #if 0
 	/* LED is connected to A4 */
@@ -59,7 +67,7 @@ int main (void) {
 
 #endif
 
-#if 1
+#if 0
 	Led_Init(LED_PIN);
 	Button_Init(BUTTON_PIN);
 	while (1)
@@ -73,5 +81,17 @@ int main (void) {
 	}
 #endif
 
+#if 0
+	u8 i;
+	Ssd_Init();
+	for (i=0; i<9; i++) {
+		Ssd_DisplayNumber(i);
+		_delay_ms(1000);
+	}
+	for (i=9; i>0; i--) {
+		Ssd_DisplayNumber(i);
+		_delay_ms(1000);
+	}
+#endif 
 
 }
