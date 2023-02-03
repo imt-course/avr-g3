@@ -12,6 +12,10 @@
 #include "Lcd_Cfg.h"
 #include "Lcd.h"
 
+static void Lcd_SendCommand(u8 command);
+static void Lcd_SendData(u8 data);
+
+
 void Lcd_Init(void) {
     Dio_SetPinMode(LCD_PIN_RS, DIO_MODE_OUTPUT);
     Dio_SetPinMode(LCD_PIN_RW, DIO_MODE_OUTPUT);
@@ -42,7 +46,34 @@ void Lcd_Init(void) {
    Lcd_SendCommand(0b00000001);
 }
 
-void Lcd_SendCommand(u8 command) {
+void Lcd_DisplayCharcter(char data) {
+    Lcd_SendData(data);
+}
+
+void Lcd_DisplayString(const char* str) {
+    while (*str != '\0') {
+        Lcd_SendData(*str);
+        str++;
+    }
+}
+
+void Lcd_DisplayNumber(s32 number) {
+    u32 reversed = 0;
+    if (number < 0) {
+        number = number * -1;
+        Lcd_SendData('-');
+    }
+    while (number > 0) {
+        reversed = (reversed*10) + (number%10);
+        number /= 10;
+    }
+    while (reversed != 0) {
+        Lcd_SendData(reversed%10 + '0');
+        reversed /= 10;
+    }
+}
+
+static void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_LOW);
     Dio_SetPinLevel(LCD_PIN_RW, DIO_LEVEL_LOW);
     Dio_SetPinLevel(LCD_PIN_D0, GET_BIT(command, 0));
@@ -58,7 +89,7 @@ void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_LOW);
 }
 
-void Lcd_SendData(u8 data) {
+static void Lcd_SendData(u8 data) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_HIGH);
     Dio_SetPinLevel(LCD_PIN_RW, DIO_LEVEL_LOW);
     Dio_SetPinLevel(LCD_PIN_D0, GET_BIT(data, 0));
@@ -72,5 +103,4 @@ void Lcd_SendData(u8 data) {
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_HIGH);
     _delay_ms(2);
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_LOW);
-
 }

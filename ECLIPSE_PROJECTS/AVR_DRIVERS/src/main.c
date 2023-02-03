@@ -18,11 +18,8 @@
 
 int main (void) {
 	Lcd_Init();
-	Lcd_SendData('A');
-	Lcd_SendData('h');
-	Lcd_SendData('m');
-	Lcd_SendData('e');
-	Lcd_SendData('d');
+	Lcd_DisplayString("My name is Hassan");
+	Lcd_DisplayCharcter('-');
 
 #if 0
 	/* LED is connected to A4 */
