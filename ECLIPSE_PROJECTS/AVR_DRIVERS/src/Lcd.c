@@ -79,6 +79,34 @@ void Lcd_DisplayNumber(s32 number) {
 void Lcd_ClearDisplay(void) {
     Lcd_SendCommand(1);
 }
+// 1, 39 -> 1*0x40 + 39 = 0x40 + 0x27 = 0x67
+void Lcd_SetCursorPosition(u8 row, u8 column) {
+    u8 address = row*0x40 + column;
+    SET_BIT(address, 7);
+    Lcd_SendCommand(address);
+}
+
+void Lcd_ShiftDisplayLeft(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00011000);
+        count--;
+    }
+}
+
+void Lcd_ShiftDisplayRight(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00011100);
+        count--;
+    }
+}
+
+void Lcd_ReturnHome(void) {
+    Lcd_SendCommand(0b00000010);
+}
+
+/** TODO: Implement Lcd_ControlDisplay Function */
+void Lcd_ControlDisplay(const Lcd_DisplayControlType* control) {
+}
 
 static void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_LOW);

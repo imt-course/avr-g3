@@ -18,16 +18,45 @@
 #include "Delay.h"
 
 int main (void) {
+
+	Lcd_Init();
+	Lcd_DisplayControlType control = {
+		LCD_STATE_ON,
+		LCD_STATE_OFF,
+		LCD_STATE_OFF,
+		LCD_LINES_2,
+		LCD_FONT_5X11
+	};
+	Lcd_ControlDisplay(&control);
+	Lcd_DisplayString("First Line");
+	Lcd_SetCursorPosition(1,2);
+	Lcd_DisplayString("Second Line");
+	/*
+	First Line
+	  Second Line
+	*/
+
+#if 0
 	Keypad_ButtonType i;
+	u8 flag[16] = {0};
 	Keypad_Init();
 	Lcd_Init();
-	for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
-		if (Keypad_GetButtonState(i) == KEYPAD_PRESSED) {
-			Lcd_DisplayNumber(i);
-			Lcd_DisplayCharcter('-');
+	Lcd_DisplayCharcter('*');
+	while (1) {
+		for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
+			if (Keypad_GetButtonState(i) == KEYPAD_PRESSED) {
+				if (flag[i] == 0) {
+				flag[i] = 1;
+				Lcd_DisplayNumber(i);
+				Lcd_DisplayCharcter('-');
+				}
+			}
+			else {
+				flag[i] = 0;
+			}
 		}
 	}
-
+#endif
 
 #if 0
 	Lcd_Init();
