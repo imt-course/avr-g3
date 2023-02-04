@@ -14,5 +14,6 @@ void Lcd_Init(void);
 void Lcd_DisplayCharcter(char data);
 void Lcd_DisplayString(const char* str);
 void Lcd_DisplayNumber(s32 number);
+void Lcd_ClearDisplay(void);
 
 #endif /* INC_LCD_H_ */

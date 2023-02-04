@@ -58,19 +58,26 @@ void Lcd_DisplayString(const char* str) {
 }
 
 void Lcd_DisplayNumber(s32 number) {
-    u32 reversed = 0;
+    u64 reversed = 0;
+    u8 digitsCounter = 0;
     if (number < 0) {
         number = number * -1;
         Lcd_SendData('-');
     }
-    while (number > 0) {
+    do {
         reversed = (reversed*10) + (number%10);
         number /= 10;
-    }
-    while (reversed != 0) {
+        digitsCounter++;
+    } while (number > 0);
+    while (digitsCounter > 0) {
         Lcd_SendData(reversed%10 + '0');
         reversed /= 10;
+        digitsCounter--;
     }
+}
+
+void Lcd_ClearDisplay(void) {
+    Lcd_SendCommand(1);
 }
 
 static void Lcd_SendCommand(u8 command) {

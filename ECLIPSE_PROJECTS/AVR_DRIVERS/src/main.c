@@ -14,12 +14,27 @@
 #include "Button.h"
 #include "Ssd.h"
 #include "Lcd.h"
+#include "Keypad.h"
 #include "Delay.h"
 
 int main (void) {
+	Keypad_ButtonType i;
+	Keypad_Init();
+	Lcd_Init();
+	for (i=KEYPAD_BUTTON_00; i<=KEYPAD_BUTTON_15; i++) {
+		if (Keypad_GetButtonState(i) == KEYPAD_PRESSED) {
+			Lcd_DisplayNumber(i);
+			Lcd_DisplayCharcter('-');
+		}
+	}
+
+
+#if 0
 	Lcd_Init();
 	Lcd_DisplayString("My name is Hassan");
 	Lcd_DisplayCharcter('-');
+	Lcd_DisplayNumber(2147483647);
+#endif
 
 #if 0
 	/* LED is connected to A4 */
