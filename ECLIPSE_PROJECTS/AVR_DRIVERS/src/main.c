@@ -19,15 +19,7 @@
 
 int main (void) {
 
-	Lcd_Init();
-	Lcd_DisplayControlType control = {
-		LCD_STATE_ON,
-		LCD_STATE_OFF,
-		LCD_STATE_OFF,
-		LCD_LINES_2,
-		LCD_FONT_5X11
-	};
-	Lcd_ControlDisplay(&control);
+	Lcd_Init(&Lcd_Configuration);
 	Lcd_DisplayString("First Line");
 	Lcd_SetCursorPosition(1,2);
 	Lcd_DisplayString("Second Line");

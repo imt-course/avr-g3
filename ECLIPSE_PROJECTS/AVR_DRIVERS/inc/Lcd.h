@@ -22,7 +22,7 @@ typedef enum {
 
 typedef enum {
     LCD_FONT_5X7,
-    LCD_FONT_5X11
+    LCD_FONT_5X10
 } Lcd_FontType;
 
 typedef struct  
@@ -34,8 +34,9 @@ typedef struct
     Lcd_FontType font;
 } Lcd_DisplayControlType;
 
+extern Lcd_DisplayControlType Lcd_Configuration;
 
-void Lcd_Init(void);
+void Lcd_Init(const Lcd_DisplayControlType* control);
 void Lcd_DisplayCharcter(char data);
 void Lcd_DisplayString(const char* str);
 void Lcd_DisplayNumber(s32 number);
@@ -45,5 +46,6 @@ void Lcd_ShiftDisplayLeft(u8 count);
 void Lcd_ShiftDisplayRight(u8 count);
 void Lcd_ReturnHome(void);
 void Lcd_ControlDisplay(const Lcd_DisplayControlType* control);
+
 
 #endif /* INC_LCD_H_ */
