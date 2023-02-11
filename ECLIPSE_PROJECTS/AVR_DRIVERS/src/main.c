@@ -15,9 +15,32 @@
 #include "Ssd.h"
 #include "Lcd.h"
 #include "Keypad.h"
+#include "ExtInt.h"
+#include "Gie.h"
 #include "Delay.h"
 
+
+void __vector_1 (void) __attribute__((signal));
+void __vector_1 (void) {
+	Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
+}
+
+
 int main (void) {
+	/* LED Pin */
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
+	/* Button Pin */
+	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_PULLUP);
+	ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_FALLING_EDGE);
+	ExtInt_EnableNotification(EXTINT_CHANNEL_INT0);
+	Gie_Enable();
+	while (1)
+	{
+		
+	}
+	
+
+#if 0
 	u16 x = 15;
 	u8 pattern[] {
 		0b00110,
@@ -33,6 +56,8 @@ int main (void) {
 	Lcd_SaveSpecialCharacter(0, pattern);
 	Lcd_SetCursorPosition(1,0);
 	Lcd_DisplayCharcter(0);	
+#endif
+
 
 #if 0
 	Keypad_ButtonType i;
