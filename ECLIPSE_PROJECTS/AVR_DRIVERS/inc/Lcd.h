@@ -44,8 +44,12 @@ void Lcd_ClearDisplay(void);
 void Lcd_SetCursorPosition(u8 row, u8 column);
 void Lcd_ShiftDisplayLeft(u8 count);
 void Lcd_ShiftDisplayRight(u8 count);
+void Lcd_ShiftCursorLeft(u8 count);
+void Lcd_ShiftCursorRight(u8 count);
 void Lcd_ReturnHome(void);
 void Lcd_ControlDisplay(const Lcd_DisplayControlType* control);
+void Lcd_SaveSpecialCharacter(u8 location, u8* pattern);
+void Lcd_Print(char* str, ...);
 
 
 #endif /* INC_LCD_H_ */

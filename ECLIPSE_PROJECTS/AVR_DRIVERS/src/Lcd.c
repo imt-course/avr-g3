@@ -5,6 +5,7 @@
  *      Author: ahmad
  */
 
+#include <stdarg.h>
 #include "Types.h"
 #include "Dio.h"
 #include "Macros.h"
@@ -101,6 +102,20 @@ void Lcd_ReturnHome(void) {
     Lcd_SendCommand(0b00000010);
 }
 
+void Lcd_ShiftCursorRight(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00010100);
+        count--;
+    }
+}
+
+void Lcd_ShiftCursorLeft(u8 count) {
+    while (count > 0) {
+        Lcd_SendCommand(0b00010000);
+        count--;
+    }
+}
+
 void Lcd_ControlDisplay(const Lcd_DisplayControlType* control) {
     u8 command;
     /* Display ON/OFF Control */
@@ -129,6 +144,51 @@ void Lcd_ControlDisplay(const Lcd_DisplayControlType* control) {
     }
     Lcd_SendCommand(command);
 }
+
+void Lcd_SaveSpecialCharacter(u8 location, u8* pattern) {
+    u8 i;
+    if (location < 8) {
+        location *= 8;
+        SET_BIT(location, 6);
+        Lcd_SendCommand(location);
+        for (i=0; i<8; i++) {
+            Lcd_SendData(pattern[i]);
+        }
+    }
+}
+
+void Lcd_Print(char* str, ...) {
+	va_list var_list;
+	va_start(var_list, str);
+	while(*str != '\0') {
+		if (*str == '%') {
+			str++;
+			switch(*str) {
+				case 'c':
+                    Lcd_DisplayCharcter((char)va_arg(var_list, int));
+					break;
+				case 'd':
+                    Lcd_DisplayNumber((int)va_arg(var_list, int));
+					break;
+				case 'u':
+                    Lcd_DisplayNumber((unsigned int)va_arg(var_list, unsigned int));
+					break;
+				case 'l':
+                    Lcd_DisplayNumber((long int)va_arg(var_list, long int));
+					break;
+				default:
+					Lcd_DisplayCharcter(*str);
+					break;
+			}
+		}
+		else {
+			Lcd_DisplayCharcter(*str);
+		}
+		str++;
+	}
+}
+
+
 
 static void Lcd_SendCommand(u8 command) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_LOW);
@@ -161,23 +221,23 @@ static void Lcd_SendData(u8 data) {
     Dio_SetPinLevel(LCD_PIN_RS, DIO_LEVEL_HIGH);
     Dio_SetPinLevel(LCD_PIN_RW, DIO_LEVEL_LOW);
 #if LCD_MODE == LCD_MODE_8_BIT
-    Dio_SetPinLevel(LCD_PIN_D0, GET_BIT(command, 0));
-    Dio_SetPinLevel(LCD_PIN_D1, GET_BIT(command, 1));
-    Dio_SetPinLevel(LCD_PIN_D2, GET_BIT(command, 2));
-    Dio_SetPinLevel(LCD_PIN_D3, GET_BIT(command, 3));
+    Dio_SetPinLevel(LCD_PIN_D0, GET_BIT(data, 0));
+    Dio_SetPinLevel(LCD_PIN_D1, GET_BIT(data, 1));
+    Dio_SetPinLevel(LCD_PIN_D2, GET_BIT(data, 2));
+    Dio_SetPinLevel(LCD_PIN_D3, GET_BIT(data, 3));
 #endif
-    Dio_SetPinLevel(LCD_PIN_D4, GET_BIT(command, 4));
-    Dio_SetPinLevel(LCD_PIN_D5, GET_BIT(command, 5));
-    Dio_SetPinLevel(LCD_PIN_D6, GET_BIT(command, 6));
-    Dio_SetPinLevel(LCD_PIN_D7, GET_BIT(command, 7));
+    Dio_SetPinLevel(LCD_PIN_D4, GET_BIT(data, 4));
+    Dio_SetPinLevel(LCD_PIN_D5, GET_BIT(data, 5));
+    Dio_SetPinLevel(LCD_PIN_D6, GET_BIT(data, 6));
+    Dio_SetPinLevel(LCD_PIN_D7, GET_BIT(data, 7));
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_HIGH);
     _delay_ms(2);
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_LOW);
 #if LCD_MODE == LCD_MODE_4_BIT
-    Dio_SetPinLevel(LCD_PIN_D4, GET_BIT(command, 0));
-    Dio_SetPinLevel(LCD_PIN_D5, GET_BIT(command, 1));
-    Dio_SetPinLevel(LCD_PIN_D6, GET_BIT(command, 2));
-    Dio_SetPinLevel(LCD_PIN_D7, GET_BIT(command, 3));
+    Dio_SetPinLevel(LCD_PIN_D4, GET_BIT(data, 0));
+    Dio_SetPinLevel(LCD_PIN_D5, GET_BIT(data, 1));
+    Dio_SetPinLevel(LCD_PIN_D6, GET_BIT(data, 2));
+    Dio_SetPinLevel(LCD_PIN_D7, GET_BIT(data, 3));
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_HIGH);
     _delay_ms(2);
     Dio_SetPinLevel(LCD_PIN_EN, DIO_LEVEL_LOW);

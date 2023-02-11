@@ -18,15 +18,21 @@
 #include "Delay.h"
 
 int main (void) {
-
+	u16 x = 15;
+	u8 pattern[] {
+		0b00110,
+		0b01100,
+		0b00000,
+		0b00100,
+		0b00100,
+		0b00100,
+		0b00100,
+		0b00000
+	};
 	Lcd_Init(&Lcd_Configuration);
-	Lcd_DisplayString("First Line");
-	Lcd_SetCursorPosition(1,2);
-	Lcd_DisplayString("Second Line");
-	/*
-	First Line
-	  Second Line
-	*/
+	Lcd_SaveSpecialCharacter(0, pattern);
+	Lcd_SetCursorPosition(1,0);
+	Lcd_DisplayCharcter(0);	
 
 #if 0
 	Keypad_ButtonType i;
