@@ -19,12 +19,9 @@
 #include "Gie.h"
 #include "Delay.h"
 
-
-void __vector_1 (void) __attribute__((signal));
-void __vector_1 (void) {
+void Handler_Int0 (void) {
 	Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
 }
-
 
 int main (void) {
 	/* LED Pin */
@@ -32,6 +29,7 @@ int main (void) {
 	/* Button Pin */
 	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_PULLUP);
 	ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_FALLING_EDGE);
+	ExInt_SetCallback(EXTINT_CHANNEL_INT0, Handler_Int0);
 	ExtInt_EnableNotification(EXTINT_CHANNEL_INT0);
 	Gie_Enable();
 	while (1)

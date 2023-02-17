@@ -33,5 +33,5 @@ void ExtInt_EnableNotification(ExtInt_ChannelType channel);
 void ExtInt_DisableNotification(ExtInt_ChannelType channel);
 void ExtInt_ClearFlag(ExtInt_ChannelType channel);
 u8 ExtInt_ReadFlag(ExtInt_ChannelType channel);
-
+void ExInt_SetCallback(ExtInt_ChannelType channel, void (*funcPtr) (void));
 #endif /* INC_EXTINT_H_ */
