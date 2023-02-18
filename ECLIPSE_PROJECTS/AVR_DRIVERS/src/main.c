@@ -17,6 +17,7 @@
 #include "Keypad.h"
 #include "ExtInt.h"
 #include "Gie.h"
+#include "Adc.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
@@ -24,6 +25,21 @@ void Handler_Int0 (void) {
 }
 
 int main (void) {
+	u16 result = 0;
+	Adc_Init();
+	Lcd_Init(&Lcd_Configuration);
+	Lcd_DisplayNumber(100);
+	_delay_ms(500);
+	while (1)
+	{
+		Lcd_ClearDisplay();
+		Adc_StartConversion(ADC_CHANNEL_ADC0);
+		result = Adc_GetResult();
+		Lcd_Print("Adc = %d", result);
+		_delay_ms(500);
+	}
+
+#if 0
 	/* LED Pin */
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	/* Button Pin */
@@ -36,7 +52,7 @@ int main (void) {
 	{
 		
 	}
-	
+#endif 
 
 #if 0
 	u16 x = 15;

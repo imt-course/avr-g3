@@ -51,6 +51,13 @@
 #define GIFR_INTF0  6
 #define GIFR_INTF1  7
 
+/************* ADC Registers *************/
+#define ADMUX		*((volatile u8*) 0x27)
+#define ADCSRA		*((volatile u8*) 0x26)
+#define ADCDATA		*((volatile u16*) 0x24)
+#define ADCL		*((volatile u8*) 0x24)
+#define ADCH		*((volatile u8*) 0x25)
+#define SFIOR		*((volatile u8*) 0x50)
 
 
 #endif /* INC_REGISTERS_H_ */
