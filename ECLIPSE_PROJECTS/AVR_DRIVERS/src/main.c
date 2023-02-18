@@ -26,19 +26,42 @@ void Handler_Int0 (void) {
 
 int main (void) {
 	u16 result = 0;
-	Adc_Init();
+	Adc_Init(&Adc_Configuration);
+	Lcd_Init(&Lcd_Configuration);
+	Adc_StartConversion(ADC_CHANNEL_ADC0);
+	while (1)
+	{
+		Lcd_ClearDisplay();
+		if (Adc_GetResultAsync(&result) == ADC_COMPLETE) {
+			Lcd_Print("Adc = %d", (((u32)result*5000)/1024));
+			Adc_StartConversion(ADC_CHANNEL_ADC0);
+		}
+
+		_delay_ms(500);
+	}
+
+#if 0
+	u16 result = 0;
+	u8 i;
+	Adc_Init(&Adc_Configuration);
 	Lcd_Init(&Lcd_Configuration);
 	Lcd_DisplayNumber(100);
 	_delay_ms(500);
 	while (1)
 	{
 		Lcd_ClearDisplay();
-		Adc_StartConversion(ADC_CHANNEL_ADC0);
-		result = Adc_GetResult();
-		Lcd_Print("Adc = %d", result);
+		result = 0;
+		for (i=0; i<20; i++) {
+			Adc_StartConversion(ADC_CHANNEL_ADC0);
+			result += Adc_GetResultSync();
+			_delay_ms(15);
+		}
+		result /= 20;
+		Lcd_Print("Adc = %d", (((u32)result*5000)/1024));
 		_delay_ms(500);
 	}
 
+#endif 
 #if 0
 	/* LED Pin */
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
