@@ -59,5 +59,13 @@
 #define ADCH		*((volatile u8*) 0x25)
 #define SFIOR		*((volatile u8*) 0x50)
 
+/************* Timer/Counter Iterrupt *************/
+#define TIMSK		*((volatile u8*) 0x59)
+#define TIFR		*((volatile u8*) 0x58)
+
+/************* Timer/Counter 0 *************/
+#define TCCR0		*((volatile u8*) 0x53)
+#define TCNT0		*((volatile u8*) 0x52)
+#define OCR0		*((volatile u8*) 0x5C)
 
 #endif /* INC_REGISTERS_H_ */

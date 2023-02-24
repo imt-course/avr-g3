@@ -18,13 +18,46 @@
 #include "ExtInt.h"
 #include "Gie.h"
 #include "Adc.h"
+#include "Interrupts.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
 	Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
 }
 
+ISR(VECTOR_TIM0_COMP) {
+	static u16 counter = 0;
+	counter++;
+	if (counter == 4000) {
+		counter = 0;
+		Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
+	}
+}
+
 int main (void) {
+	/* Waveform Generation Mode (CTC) */
+	SET_BIT(TCCR0, 3);
+	CLR_BIT(TCCR0, 6);
+	/* Output Compare Register */
+	OCR0 = 250;
+	/* Output Compare Match Interrupt Enable */
+	SET_BIT(TIMSK, 1);
+	/* Clock Select (prescaler 8)*/
+	CLR_BIT(TCCR0, 2);
+	SET_BIT(TCCR0, 1);
+	CLR_BIT(TCCR0, 0);
+
+	/* Glopal Interrupt Enable */
+	Gie_Enable();
+
+	while (1)
+	{
+		
+	}
+	
+
+
+#if 0
 	u16 result = 0;
 	Adc_Init(&Adc_Configuration);
 	Lcd_Init(&Lcd_Configuration);
@@ -39,6 +72,8 @@ int main (void) {
 
 		_delay_ms(500);
 	}
+#endif 
+
 
 #if 0
 	u16 result = 0;
