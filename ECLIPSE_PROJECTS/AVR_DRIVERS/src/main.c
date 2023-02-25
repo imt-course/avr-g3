@@ -19,22 +19,55 @@
 #include "Gie.h"
 #include "Adc.h"
 #include "Interrupts.h"
+#include "Gpt.h"
+#include "Pwm.h"
 #include "Delay.h"
 
 void Handler_Int0 (void) {
 	Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
 }
 
-ISR(VECTOR_TIM0_COMP) {
-	static u16 counter = 0;
+void Handler_Tim0_COMP (void) {
+	static u8 counter = 0;
 	counter++;
-	if (counter == 4000) {
+	if (counter == 250) {
 		counter = 0;
 		Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
 	}
 }
 
 int main (void) {
+	u8 i;
+	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
+	Pwm_Start(PWM_CHANNEL_OC0, PWM_PRESCALER_8);
+	while (1)
+	{
+		for (i=0; i<=100; i++) {
+			Pwm_SetDutyCycle(PWM_CHANNEL_OC0, i);
+			_delay_ms(10);
+		}
+		for (i=100; i>0; i--) {
+			Pwm_SetDutyCycle(PWM_CHANNEL_OC0, i);
+			_delay_ms(10);
+		}
+	}
+	
+#if 0
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
+	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration[0]);
+	Gpt_SetCompareValue(GPT_COMP_REG_TIM0, 125);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM0_COMP, Handler_Tim0_COMP);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM0_COMP);
+	Gpt_Start(GPT_CHANNEL_TIM0, GPT_PRESCALER_256);
+	Gie_Enable();
+	while (1)
+	{
+		
+	}
+#endif
+
+#if 0
+	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	/* Waveform Generation Mode (CTC) */
 	SET_BIT(TCCR0, 3);
 	CLR_BIT(TCCR0, 6);
@@ -54,7 +87,7 @@ int main (void) {
 	{
 		
 	}
-	
+#endif
 
 
 #if 0
