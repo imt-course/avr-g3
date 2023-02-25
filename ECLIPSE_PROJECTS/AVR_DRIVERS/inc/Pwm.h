@@ -35,12 +35,22 @@ typedef enum {
 
 typedef enum {
     PWM_MODE_FAST,
-    PWM_MODE_PHASE_CORRECT
+    PWM_MODE_PHASE_CORRECT,
+    PWM_MODE_PHASE_CORRECT_8_BIT,
+    PWM_MODE_PHASE_CORRECT_9_BIT,
+    PWM_MODE_PHASE_CORRECT_10_BIT,
+    PWM_MODE_FAST_8_BIT,
+    PWM_MODE_FAST_9_BIT,
+    PWM_MODE_FAST_10_BIT,
+    PWM_MODE_PHASE_CORRECT_ICR1,
+    PWM_MODE_FAST_ICR1
 } Pwm_ModeType;
 
 void Pwm_Init(Pwm_ChannelType channel, Pwm_ModeType mode);
 void Pwm_Start(Pwm_ChannelType channel, Pwm_PrescalerType prescaler);
 void Pwm_Stop(Pwm_ChannelType channel);
 void Pwm_SetDutyCycle(Pwm_ChannelType channel, u8 value);
+void Pwm_SetTimeOn(Pwm_ChannelType channel, u8 value);
+void Pwm_SetICR(u16 value);
 
 #endif /* INC_PWM_H_ */

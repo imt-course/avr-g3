@@ -17,6 +17,8 @@ void Pwm_Init(Pwm_ChannelType channel, Pwm_ModeType mode) {
     case PWM_CHANNEL_OC0:
     {
         Dio_SetPinMode(PWM_PIN_OC0, DIO_MODE_OUTPUT);
+        CLR_BIT(TCCR0, 4);
+        SET_BIT(TCCR0, 5);
         switch (mode)
         {
         case PWM_MODE_PHASE_CORRECT:
@@ -116,4 +118,19 @@ void Pwm_SetDutyCycle(Pwm_ChannelType channel, u8 value) {
     default:
         break;
     }
+}
+
+void Pwm_SetTimeOn(Pwm_ChannelType channel, u8 value) {
+    switch (channel)
+    {
+    case PWM_CHANNEL_OC0:
+        OCR0 = value;
+        break;
+    /** TODO: Complete all cases (OC1A, OC1B, OC2) */
+    default:
+        break;
+    }
+}
+void Pwm_SetICR(u16 value) {
+    /** TODO: */
 }
