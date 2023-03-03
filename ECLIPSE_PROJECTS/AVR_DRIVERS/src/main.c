@@ -51,17 +51,13 @@ void Handler_Tim2_COMP(void) {
 int main (void) {
 	u16 i;
 	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR1);
-	Pwm_SetICR(2000);
+	Pwm_SetICR(20000);
 	Pwm_Start(PWM_CHANNEL_OC1A, PWM_PRESCALER_8);
 	while (1)
 	{
-		for (i = 1000; i<1500; i+=10) {
+		for (i = 500; i<2500; i+=100) {
 			Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
-			_delay_ms(5);
-		}
-		for (i = 1500; i>1000; i-=10) {
-			Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
-			_delay_ms(5);
+			_delay_ms(500);
 		}
 	}
 	
