@@ -231,7 +231,7 @@ void Pwm_SetDutyCycle(Pwm_ChannelType channel, u8 value) {
     }
 }
 
-void Pwm_SetTimeOn(Pwm_ChannelType channel, u8 value) {
+void Pwm_SetTimeOn(Pwm_ChannelType channel, u16 value) {
     switch (channel)
     {
     case PWM_CHANNEL_OC0:

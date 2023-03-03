@@ -52,7 +52,7 @@ void Pwm_Init(Pwm_ChannelType channel, Pwm_ModeType mode);
 void Pwm_Start(Pwm_ChannelType channel, Pwm_PrescalerType prescaler);
 void Pwm_Stop(Pwm_ChannelType channel);
 void Pwm_SetDutyCycle(Pwm_ChannelType channel, u8 value);
-void Pwm_SetTimeOn(Pwm_ChannelType channel, u8 value);
+void Pwm_SetTimeOn(Pwm_ChannelType channel, u16 value);
 void Pwm_SetICR(u16 value);
 
 #endif /* INC_PWM_H_ */

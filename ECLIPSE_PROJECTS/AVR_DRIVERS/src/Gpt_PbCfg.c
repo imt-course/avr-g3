@@ -10,7 +10,7 @@
 Gpt_ConfigType Gpt_Configuration [3] = {
     /* Configuration for TIM0 */
     {
-        GPT_MODE_CTC,
+        GPT_MODE_NORMAL,
         GPT_COMP_OUT_MODE_DISCONNECTED
     },
     /* Configuration for TIM1 */

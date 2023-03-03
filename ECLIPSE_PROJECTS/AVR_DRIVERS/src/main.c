@@ -25,10 +25,9 @@
 
 volatile u8 i = 0;
 volatile u8 countUp = 1;
-
-void Handler_Int0 (void) {
-	Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
-}
+volatile u16 T_on;
+volatile u16 T_total;
+volatile u8 overflow_counter = 0;
 
 void Handler_Tim0_COMP (void) {
 	static u8 counter = 0;
@@ -48,7 +47,63 @@ void Handler_Tim2_COMP(void) {
 	}
 }
 
+
+void Handler_Int0 (void) {
+	static u8 state = 1;
+	switch (state)
+	{
+	case 1:
+		Gpt_Reset(GPT_CHANNEL_TIM0);
+		state = 2;
+		break;
+	case 2:
+		T_total = 0xFF*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0);
+		ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_FALLING_EDGE);
+		state = 3;
+		break;
+	case 3:
+		T_on = 0xFF*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0) - T_total;
+		ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_RISING_EDGE);
+		state = 1;
+	default:
+		break;
+	}
+}
+
+void Handler_Tim0_OVF (void) {
+	overflow_counter++;
+}
+
 int main (void) {
+
+	Lcd_Init(void);
+
+	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
+
+	ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_RISING_EDGE);
+	ExInt_SetCallback(EXTINT_CHANNEL_INT0, Handler_Int0);
+	ExtInt_EnableNotification(EXTINT_CHANNEL_INT0);
+
+	Gpt_Init(GPT_CHANNEL_TIM0, &Gpt_Configuration[0]);
+	Gpt_Start(GPT_CHANNEL_TIM0, GPT_PRESCALER_8);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM0_OVF, Handler_Tim0_OVF);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM0_OVF);
+
+	Gie_Enable();
+
+	Lcd_DisplayString(" ** ");
+	_delay_ms(1000);
+
+	while (1)
+	{
+		Lcd_Print("T_total = %d", T_total);
+		Lcd_SetCursorPosition(1,0);
+		Lcd_Print("T_on = %d", T_on);
+		_delay_ms(1000);
+		Lcd_ClearDisplay();
+	}
+	
+#if 0
 	u16 i;
 	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR1);
 	Pwm_SetICR(20000);
@@ -60,7 +115,8 @@ int main (void) {
 			_delay_ms(500);
 		}
 	}
-	
+#endif 
+
 #if 0
 	u8 last_value = 1;
 	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
