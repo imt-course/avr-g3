@@ -54,6 +54,7 @@ void Handler_Int0 (void) {
 	{
 	case 1:
 		Gpt_Reset(GPT_CHANNEL_TIM0);
+		overflow_counter = 0;
 		state = 2;
 		break;
 	case 2:
@@ -65,6 +66,7 @@ void Handler_Int0 (void) {
 		T_on = 0xFF*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0) - T_total;
 		ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_RISING_EDGE);
 		state = 1;
+		break;
 	default:
 		break;
 	}
@@ -76,7 +78,7 @@ void Handler_Tim0_OVF (void) {
 
 int main (void) {
 
-	Lcd_Init(void);
+	Lcd_Init(&Lcd_Configuration);
 
 	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
 
