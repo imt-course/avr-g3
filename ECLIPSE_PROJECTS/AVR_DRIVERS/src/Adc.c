@@ -7,10 +7,16 @@
 #include "Types.h"
 #include "Macros.h"
 #include "Registers.h"
+#include "Interrupts.h"
 #include "Adc.h"
 
+void (*Adc_Callback) (u16 data) = NULL_PTR;
 
-
+ISR(VECTOR_ADC) {
+    if (NULL_PTR != Adc_Callback) {
+        Adc_Callback(ADCDATA&0x3FF);
+    }
+}
 
 void Adc_Init(const Adc_ConfigurationType* config) {
 
@@ -150,5 +156,5 @@ void Adc_DisableNotification(void) {
     /** TODO: */
 }
 void Adc_SetCallback(void (*funcPtr) (u16 data)) {
-    /** TODO: */
+    
 }
