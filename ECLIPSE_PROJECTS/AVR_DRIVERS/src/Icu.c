@@ -43,7 +43,7 @@ void Icu_EnableNotification(void) {
     SET_BIT(TIMSK, 5);
 }
 
-void Icu_DisbleNotification(void) {
+void Icu_DisableNotification(void) {
     CLR_BIT(TIMSK, 5);
 }
 

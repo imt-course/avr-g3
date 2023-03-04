@@ -103,7 +103,7 @@ int main (void) {
 	u8 i = 0;
 	Lcd_Init(&Lcd_Configuration);
 
-	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
+	Dio_SetPinMode(ICU_PIN, DIO_MODE_INPUT_FLOATING);
 
 	Icu_SetTriggerEdge(ICU_EDGE_RISING);
 	Icu_SetCallback(Handler_Icu);
