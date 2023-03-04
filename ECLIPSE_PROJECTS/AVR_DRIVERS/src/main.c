@@ -50,20 +50,21 @@ void Handler_Tim2_COMP(void) {
 
 void Handler_Int0 (void) {
 	static u8 state = 1;
+	static u16 offset = 0;
 	switch (state)
 	{
 	case 1:
-		Gpt_Reset(GPT_CHANNEL_TIM0);
+		offset = Gpt_GetElapsedTime(GPT_CHANNEL_TIM0);
 		overflow_counter = 0;
 		state = 2;
 		break;
 	case 2:
-		T_total = 0xFF*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0);
+		T_total = 0x100*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0) - offset;
 		ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_FALLING_EDGE);
 		state = 3;
 		break;
 	case 3:
-		T_on = 0xFF*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0) - T_total;
+		T_on = 0x100*overflow_counter + Gpt_GetElapsedTime(GPT_CHANNEL_TIM0) - T_total - offset;
 		ExtInt_SetTriggerEdge(EXTINT_CHANNEL_INT0, EXTINT_TRIGGER_RISING_EDGE);
 		state = 1;
 		break;
@@ -101,7 +102,7 @@ int main (void) {
 		Lcd_Print("T_total = %d", T_total);
 		Lcd_SetCursorPosition(1,0);
 		Lcd_Print("T_on = %d", T_on);
-		_delay_ms(1000);
+		_delay_ms(100);
 		Lcd_ClearDisplay();
 	}
 	
@@ -114,7 +115,7 @@ int main (void) {
 	{
 		for (i = 500; i<2500; i+=100) {
 			Pwm_SetTimeOn(PWM_CHANNEL_OC1A, i);
-			_delay_ms(500);
+			_delay_ms(1500);
 		}
 	}
 #endif 
