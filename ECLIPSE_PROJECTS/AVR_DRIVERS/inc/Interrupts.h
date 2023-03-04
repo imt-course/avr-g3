@@ -11,6 +11,12 @@
 #define VECTOR_INT0         __vector_1
 #define VECTOR_INT1         __vector_2
 #define VECTOR_INT2         __vector_3
+#define VECTOR_TIM2_COMP    __vector_4
+#define VECTOR_TIM2_OVF     __vector_5
+#define VECTOR_TIM1_CAPT    __vector_6
+#define VECTOR_TIM1_COMPA   __vector_7
+#define VECTOR_TIM1_COMPB   __vector_8
+#define VECTOR_TIM1_OVF     __vector_9
 #define VECTOR_TIM0_COMP    __vector_10
 #define VECTOR_TIM0_OVF     __vector_11
 

@@ -21,32 +21,50 @@
 #include "Interrupts.h"
 #include "Gpt.h"
 #include "Pwm.h"
+#include "Icu.h"
 #include "Delay.h"
 
-volatile u8 i = 0;
-volatile u8 countUp = 1;
+#define ICU_HW
 volatile u16 T_on;
 volatile u16 T_total;
 volatile u8 overflow_counter = 0;
 
-void Handler_Tim0_COMP (void) {
-	static u8 counter = 0;
-	counter++;
-	if (counter == 250) {
-		counter = 0;
-		Dio_FlipPinLevel(DIO_PORTA, DIO_PIN0);
+#ifdef ICU_HW
+
+void Handler_Icu (u16 value) {
+	static u8 state = 1;
+	static u16 offset = 0;
+	switch (state)
+	{
+	case 1:
+		offset = value;
+		overflow_counter = 0;
+		state = 2;
+		break;
+	case 2:
+		T_total = 0x100*overflow_counter + value - offset;
+		Icu_SetTriggerEdge(ICU_EDGE_FALLING);
+		state = 3;
+		break;
+	case 3:
+		T_on = 0x100*overflow_counter + value - T_total - offset;
+		Icu_SetTriggerEdge(ICU_EDGE_RISING);
+		state = 1;
+		break;
+	default:
+		break;
 	}
 }
 
-void Handler_Tim2_COMP(void) {
-	if (countUp == 1) {
-		i++;
-	}
-	else {
-		i--;
-	}
+void Handler_Tim1_OVF (void) {
+	overflow_counter++;
 }
 
+#endif 
+
+
+
+#ifdef ICU_SW
 
 void Handler_Int0 (void) {
 	static u8 state = 1;
@@ -77,7 +95,47 @@ void Handler_Tim0_OVF (void) {
 	overflow_counter++;
 }
 
+#endif 
+
 int main (void) {
+
+#ifdef ICU_HW
+	u8 i = 0;
+	Lcd_Init(&Lcd_Configuration);
+
+	Dio_SetPinMode(EXTINT_PIN_INT0, DIO_MODE_INPUT_FLOATING);
+
+	Icu_SetTriggerEdge(ICU_EDGE_RISING);
+	Icu_SetCallback(Handler_Icu);
+	Icu_EnableNotification();
+
+	Gpt_Init(GPT_CHANNEL_TIM1, &Gpt_Configuration[1]);
+	Gpt_Start(GPT_CHANNEL_TIM1, GPT_PRESCALER_8);
+	Gpt_SetCallback(GPT_INT_SOURCE_TIM1_OVF, Handler_Tim1_OVF);
+	Gpt_EnableNotification(GPT_INT_SOURCE_TIM1_OVF);
+
+	Pwm_Init(PWM_CHANNEL_OC0, PWM_MODE_FAST);
+	Pwm_Start(PWM_CHANNEL_OC0, PWM_PRESCALER_8);
+
+	Gie_Enable();
+
+	Lcd_DisplayString(" ** ");
+	_delay_ms(1000);
+
+	while (1)
+	{
+		Pwm_SetTimeOn(PWM_CHANNEL_OC0, i);
+		_delay_ms(20);
+		Lcd_Print("T_total = %d", T_total);
+		Lcd_SetCursorPosition(1,0);
+		Lcd_Print("T_on = %d", T_on);
+		_delay_ms(500);
+		Lcd_ClearDisplay();
+		i += 50;
+	}
+#endif 
+
+#ifdef ICU_SW
 
 	Lcd_Init(&Lcd_Configuration);
 
@@ -105,7 +163,9 @@ int main (void) {
 		_delay_ms(100);
 		Lcd_ClearDisplay();
 	}
-	
+
+#endif 
+
 #if 0
 	u16 i;
 	Pwm_Init(PWM_CHANNEL_OC1A, PWM_MODE_FAST_ICR1);
