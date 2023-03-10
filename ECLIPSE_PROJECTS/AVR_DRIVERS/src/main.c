@@ -23,6 +23,7 @@
 #include "Pwm.h"
 #include "Icu.h"
 #include "Wdt.h"
+#include "Uart.h"
 #include "Delay.h"
 
 //#define ICU_HW
@@ -99,6 +100,17 @@ void Handler_Tim0_OVF (void) {
 #endif 
 
 int main (void) {
+	u8 data;
+	Uart_Init();
+	while (1)
+	{
+		data = Uart_Receive();
+		Uart_Transmit(data);
+	}
+	
+
+
+#if 0
 	Dio_SetPinMode(DIO_PORTA, DIO_PIN0, DIO_MODE_OUTPUT);
 	Wdt_SetTimeOut(WDT_TIMEOUT_2100_MS);
 	Wdt_Enable();
@@ -110,7 +122,7 @@ int main (void) {
 		_delay_ms(800);
 		Wdt_Refresh();
 	}
-	
+#endif
 
 #ifdef ICU_HW
 	u8 i = 0;
