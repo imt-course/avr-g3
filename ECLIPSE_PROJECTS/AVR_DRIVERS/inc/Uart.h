@@ -11,6 +11,7 @@
 #include "Types.h"
 
 void Uart_Init(void);
+void Uart_SetBaudRate(u16 value);
 void Uart_Transmit(u8 data);
 u8 Uart_Receive(void);
 
