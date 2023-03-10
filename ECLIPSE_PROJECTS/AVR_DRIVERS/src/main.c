@@ -107,7 +107,8 @@ int main (void) {
 	Dio_SetPinLevel(DIO_PORTA, DIO_PIN0, DIO_LEVEL_LOW);
 	while (1)
 	{
-		/* code */
+		_delay_ms(800);
+		Wdt_Refresh();
 	}
 	
 
