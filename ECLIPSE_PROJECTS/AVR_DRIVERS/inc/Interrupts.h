@@ -19,6 +19,7 @@
 #define VECTOR_TIM1_OVF         __vector_9
 #define VECTOR_TIM0_COMP        __vector_10
 #define VECTOR_TIM0_OVF         __vector_11
+#define VECTOR_SPI              __vector_12
 #define VECTOR_UART_RX          __vector_13
 #define VECTOR_UART_REG_EMPTY   __vector_14
 #define VECTOR_UART_TX          __vector_15
