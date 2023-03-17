@@ -99,13 +99,25 @@ void Handler_Tim0_OVF (void) {
 
 #endif 
 
+volatile u8 receivedChar;
+volatile u8 receivedFlag = 0;
+
+void Handler_UartRx (u8 data) {
+	receivedChar = data;
+	receivedFlag = 1;
+}
+
 int main (void) {
-	u8 data;
 	Uart_Init();
+	Uart_SetReceiveCallback(Handler_UartRx);
+	Uart_EnableNotification(UART_INT_SOURCE_RX);
+	Gie_Enable();
 	while (1)
 	{
-		data = Uart_Receive();
-		Uart_Transmit(data);
+		if (receivedFlag) {
+			Uart_Transmit(receivedChar);
+			receivedFlag = 0;
+		}
 	}
 	
 

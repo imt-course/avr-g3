@@ -15,9 +15,31 @@
 #include "Uart.h"
 
 
+void (*Uart_RxCallback) (u8 data) = NULL_PTR;
+void (*Uart_TxCallback) (void   ) = NULL_PTR;
+void (*Uart_RegEmptyCallback) (void) = NULL_PTR;
+
+ISR(VECTOR_UART_RX) {
+    if(NULL_PTR != Uart_RxCallback) {
+        Uart_RxCallback(UDR);
+    }
+}
+
+ISR(VECTOR_UART_TX) {
+    if(NULL_PTR != Uart_TxCallback) {
+        Uart_TxCallback();
+    }
+}
+
+ISR(VECTOR_UART_REG_EMPTY) {
+    if(NULL_PTR != Uart_RegEmptyCallback) {
+        Uart_RegEmptyCallback();
+    }
+}
+
+
 void Uart_Init(void) {
     u8 temp = 0;
-    u16 baud_register_val = 0;
 #if (UART_RX_STATE == UART_ENABLED)
     /* Receiver Enable */
     Dio_SetPinMode(DIO_PORTD, DIO_PIN0, DIO_MODE_INPUT_FLOATING);
@@ -96,4 +118,51 @@ u8 Uart_Receive(void) {
     /* Wait for USART Receive Complete */
     while (GET_BIT(UCSRA, 7) == 0);
     return UDR;
+}
+
+
+void Uart_EnableNotification(Uart_InterruptSourceType source) {
+    switch (source)
+    {
+    case UART_INT_SOURCE_RX:
+        SET_BIT(UCSRB, 7);
+        break;
+    case UART_INT_SOURCE_TX:
+        SET_BIT(UCSRB, 6);
+        break;
+    case UART_INT_SOURCE_DATA_REG_EMPTY:
+        SET_BIT(UCSRB, 5);
+        break;
+    default:
+        break;
+    }
+}
+
+void Uart_DisableNotification(Uart_InterruptSourceType source) {
+    switch (source)
+    {
+    case UART_INT_SOURCE_RX:
+        CLR_BIT(UCSRB, 7);
+        break;
+    case UART_INT_SOURCE_TX:
+        CLR_BIT(UCSRB, 6);
+        break;
+    case UART_INT_SOURCE_DATA_REG_EMPTY:
+        CLR_BIT(UCSRB, 5);
+        break;
+    default:
+        break;
+    }
+}
+
+void Uart_SetTransmitCallback (void (*funcPtr) (void)) {
+    Uart_TxCallback = funcPtr;
+}
+
+void Uart_SetDataEmptyCallback(void (*funcPtr) (void)) {
+	Uart_RegEmptyCallback = funcPtr;
+}
+
+void Uart_SetReceiveCallback  (void (*funcPtr) (u8)) {
+	Uart_RxCallback = funcPtr;
 }
