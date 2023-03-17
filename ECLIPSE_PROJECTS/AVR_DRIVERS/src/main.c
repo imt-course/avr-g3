@@ -26,6 +26,7 @@
 #include "Uart.h"
 #include "Delay.h"
 
+#if 0
 //#define ICU_HW
 volatile u16 T_on;
 volatile u16 T_total;
@@ -472,3 +473,4 @@ int main (void) {
 #endif 
 
 }
+#endif
