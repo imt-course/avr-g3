@@ -58,7 +58,7 @@
  *      64
  *      128
 */
-#define SPI_PRESCALER       8
+#define SPI_PRESCALER       128
 
 
 #endif /* INC_SPI_CFG_H_ */

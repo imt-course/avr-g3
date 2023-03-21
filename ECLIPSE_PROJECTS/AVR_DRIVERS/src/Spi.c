@@ -100,6 +100,8 @@ void Spi_Init(void) {
 #else
 #error "Invalid SPI_PRESCALER"
 #endif
+
+    SET_BIT(SPCR, 6);
 }
 
 u8 Spi_Transfer(u8 data) {
