@@ -11,6 +11,7 @@
 #include "Interrupts.h"
 #include "I2c.h"
 
+// 0b11111000
 #define I2C_GET_STATUS()    (TWSR&0xF8)
 
 void I2c_MasterInit(u8 address) {
@@ -98,11 +99,13 @@ I2c_ErrorType I2c_MasterTransmit(u8 data[], u8 length, u8 address) {
     }
     state = I2c_SendSlaveAddress(address, I2C_REQUEST_WRITE);
     if (I2C_STATUS_MASTER_SA_W_ACK != state) {
+        I2c_SendStop();
         return I2C_ERROR_SLA_NACK;
     }
     for (i=0; i<length; i++) {
         state = I2c_WriteData(data[i]);
         if (I2C_STATUS_MASTER_DATA_SENT_ACK != state) {
+            I2c_SendStop();
             return I2C_ERROR_DATA_NACK;
         }
     }

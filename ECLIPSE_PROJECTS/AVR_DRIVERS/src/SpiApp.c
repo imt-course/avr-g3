@@ -14,7 +14,7 @@
 #define APP_MODE_MASTER 1
 #define APP_MODE_SLAVE  2
 
-#define APP_MODE        APP_MODE_SLAVE
+#define APP_MODE        3
 
 
 #if (APP_MODE == APP_MODE_MASTER)
