@@ -25,5 +25,5 @@ void Uart_DisableNotification   (Uart_InterruptSourceType source);
 void Uart_SetTransmitCallback   (void (*funcPtr) (void));
 void Uart_SetDataEmptyCallback  (void (*funcPtr) (void));
 void Uart_SetReceiveCallback    (void (*funcPtr) (u8));
-
+void Uart_SendNumber            (s32 number);
 #endif /* INC_UART_H_ */

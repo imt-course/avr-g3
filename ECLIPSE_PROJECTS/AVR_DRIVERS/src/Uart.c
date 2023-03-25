@@ -103,6 +103,25 @@ void Uart_SetBaudRate(u16 value) {
     UBRRH = (u8) ((baud_register_val>>8)&0x0F);
 }
 
+void Uart_SendNumber (s32 number) {
+    u64 reversed = 0;
+    u8 digitsCounter = 0;
+    if (number < 0) {
+        number = number * -1;
+        Uart_Transmit('-');
+    }
+    do {
+        reversed = (reversed*10) + (number%10);
+        number /= 10;
+        digitsCounter++;
+    } while (number > 0);
+    while (digitsCounter > 0) {
+        Uart_Transmit(reversed%10 + '0');
+        reversed /= 10;
+        digitsCounter--;
+    }
+}
+
 void Uart_Transmit(u8 data) {
     /* Wait for USART Data Register Empty */
     while (GET_BIT(UCSRA, 5) == 0);

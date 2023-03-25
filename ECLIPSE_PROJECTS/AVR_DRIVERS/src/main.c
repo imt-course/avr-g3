@@ -34,12 +34,18 @@ int main (void) {
 	u8 value = 0;
 	Eeprom_Init();
 	Uart_Init();
+	Uart_Transmit('*');
 	Eeprom_ReadByte(10, &value);
 	Uart_Transmit(value);
 	while (1)
 	{
 		value = Uart_Receive();
+		Uart_Transmit(value);
 		Eeprom_WriteByte(10, value);
+		_delay_ms(500);
+		Eeprom_ReadByte(10, &value);
+		Uart_Transmit(value);
+
 	}
 }
 

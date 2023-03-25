@@ -42,12 +42,10 @@ I2c_StatusType I2c_SendStart() {
 }
 
 I2c_StatusType I2c_SendSlaveAddress(u8 address, I2c_RequestType request) {
-    /* Clear TWI START Condition Bit */
-    CLR_BIT(TWCR, 5);
     /* Set SLA+R/W */
     TWDR = (address<<1) | request;
-    /* Clear Flag */
-    SET_BIT(TWCR, 7);
+    /* Clear TWI START Condition Bit and Clear Flag */
+    TWCR = (1<<2) | (1<<7);
     /* Wait for flag */
     while(GET_BIT(TWCR, 7) == 0);
     /* Return Status */
@@ -77,10 +75,8 @@ I2c_StatusType I2c_ReadData(u8* data) {
 }
 
 void I2c_SendStop(void) {
-    /* Clear Flag */
-    SET_BIT(TWCR, 7);
-    /* TWI STOP Condition Bit */
-    SET_BIT(TWCR, 4);
+    /* Clear Flag and TWI STOP Condition Bit */
+    TWCR = (1<<2) | (1<<4) | (1<<7);
 }
 
 void I2c_EnableAck(void) {
@@ -116,12 +112,14 @@ I2c_ErrorType I2c_MasterReceive(u8 data[], u8 length, u8 address) {
     /**
      * TODO: 
     */
+   return I2C_NO_ERROR;
 }
 
 I2c_ErrorType I2c_SlaveTransmit(u8 data[], u8 length, u8 address) {
     /**
      * TODO: 
     */
+   return I2C_NO_ERROR;
 }
 
 I2c_ErrorType I2c_SlaveReceive(u8 data[], u8 length, u8 address) {
