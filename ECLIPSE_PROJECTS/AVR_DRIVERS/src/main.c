@@ -35,6 +35,7 @@ int main (void) {
 	Eeprom_Init();
 	Uart_Init();
 	Uart_Transmit('*');
+	_delay_ms(1000);
 	Eeprom_ReadByte(10, &value);
 	Uart_Transmit(value);
 	while (1)
@@ -45,7 +46,6 @@ int main (void) {
 		_delay_ms(500);
 		Eeprom_ReadByte(10, &value);
 		Uart_Transmit(value);
-
 	}
 }
 

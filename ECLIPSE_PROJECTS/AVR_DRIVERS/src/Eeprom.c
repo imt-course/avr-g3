@@ -93,7 +93,7 @@ Eeprom_StateType Eeprom_ReadByte(u16 address, u8* data) {
     I2c_EnableAck();
 
     /* Read Data */
-    state = I2c_ReadData(&data);
+    state = I2c_ReadData(data);
     if (state != I2C_STATUS_MASTER_DATA_RECEIVED_ACK) {
         I2c_SendStop();
         return EEPROM_FAIL;
