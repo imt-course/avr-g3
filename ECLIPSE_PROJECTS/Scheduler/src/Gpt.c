@@ -48,8 +48,8 @@ void Gpt_Init(Gpt_ChannelType channel, const Gpt_ConfigType* config) {
             CLR_BIT(TCCR0, 6);
             break;
         case GPT_MODE_CTC:
-            CLR_BIT(TCCR0, 3);
-            SET_BIT(TCCR0, 6);
+            SET_BIT(TCCR0, 3);
+            CLR_BIT(TCCR0, 6);
             break;
         default:
             break;

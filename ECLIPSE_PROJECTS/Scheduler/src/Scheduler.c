@@ -39,7 +39,7 @@ void Scheduler_Start(void)
     /* Set Callback Function and Enable Interrupt */
     Gpt_SetCallback(GPT_INT_SOURCE_TIM0_COMP, Scheduler_UpdateTasks);
     Gpt_EnableNotification(GPT_INT_SOURCE_TIM0_COMP);
-    Gpt_Start(GPT_COMP_REG_TIM0, GPT_PRESCALER_64);
+    Gpt_Start(GPT_CHANNEL_TIM0, GPT_PRESCALER_64);
 }
 
 void Scheduler_Init(void)

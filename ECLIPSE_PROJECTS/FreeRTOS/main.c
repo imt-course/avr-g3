@@ -110,9 +110,10 @@ void Task1(void *pvParameters)
 {
     while (1)
     {
-        xSemaphoreTake(UartSem, portMAX_DELAY);
-        Uart_SendString("IAMTASK1 ");
-        xSemaphoreGive(UartSem);
+        if (xSemaphoreTake(UartSem, 100) == pdTRUE) {
+            Uart_SendString("IAMTASK1 ");
+            xSemaphoreGive(UartSem);
+        }
         vTaskDelay(1000);
     }
 }
@@ -153,7 +154,7 @@ void ReceiveTask(void *pvParameters)
     {
         xSemaphoreTake(ReceiveSem, portMAX_DELAY);
         Uart_Transmit(receivedMessage);
-        vTaskDelay(100);
+        vTaskDelay(500);
     }
 }
 
@@ -191,7 +192,7 @@ void ReceiveTask(void *pvParameters)
         xSemaphoreTake(ReceiveSem, portMAX_DELAY);
         Uart_Transmit(receivedMessage[counter]);
         counter++;
-        vTaskDelay(2000);
+        //vTaskDelay(10);
     }
 }
 
@@ -206,7 +207,7 @@ void ReceiveISR(u8 data)
 #elif APP_EXAMPLE == 6
 /*****************************************************************************/
 
-#define MAX_RECEIVE_CHAR 2
+#define MAX_RECEIVE_CHAR 10
 void ReceiveTask(void *pvParameters);
 void ReceiveISR(u8 data);
 xQueueHandle buffer;
@@ -228,7 +229,7 @@ void ReceiveTask(void *pvParameters)
     {
         xQueueReceive(buffer, &message, portMAX_DELAY);
         Uart_Transmit(message);
-        vTaskDelay(1000);
+        vTaskDelay(300);
     }
 }
 
